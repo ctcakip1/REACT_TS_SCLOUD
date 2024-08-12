@@ -6,7 +6,12 @@ import { Settings } from "react-slick";
 import { Box, Button, Divider } from "@mui/material";
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
-
+import Link from "next/link";
+declare const process: {
+    env: {
+        NEXT_PUBLIC_BACKEND_URL: string
+    }
+}
 interface IProps {
     data: ITrackTop[];
     title: string;
@@ -85,7 +90,9 @@ const MainSlider = (props: IProps) => {
                     return (
                         <div className="track" key={track._id}>
                             <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} />
-                            <h4>{track.title}</h4>
+                            <Link href={`/track/${track._id}?audio=${track.trackUrl}`} >
+                                <h4>{track.title}</h4>
+                            </Link>
                             <h5>{track.description}</h5>
                         </div>
                     )
