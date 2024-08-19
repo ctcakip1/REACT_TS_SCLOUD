@@ -2,7 +2,8 @@ import MainSlider from "@/components/main/main.slider";
 import { Container } from "@mui/material";
 import { sendRequest } from "@/utils/api";
 export default async function HomePage() {
-  const chills = await sendRequest<IBackendRes<ITrackTop>>({
+
+  const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: "http://localhost:8000/api/v1/tracks/top",
     method: "POST",
     body: {
@@ -11,7 +12,7 @@ export default async function HomePage() {
     },
   })
 
-  const workouts = await sendRequest<IBackendRes<ITrackTop>>({
+  const workouts = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: "http://localhost:8000/api/v1/tracks/top",
     method: "POST",
     body: {
@@ -20,7 +21,7 @@ export default async function HomePage() {
     },
   })
 
-  const party = await sendRequest<IBackendRes<ITrackTop>>({
+  const party = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: "http://localhost:8000/api/v1/tracks/top",
     method: "POST",
     body: {
