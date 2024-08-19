@@ -3,10 +3,13 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { useWavesurfer } from '@/utils/customHook'
 import { WaveSurferOptions } from "wavesurfer.js";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import './wave.scss';
+import { width } from '@mui/system';
+import zIndex from '@mui/material/styles/zIndex';
+import { Tooltip } from '@mui/material';
 // WaveSurfer hook
-
-
 const WaveTrack = () => {
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio')
@@ -65,12 +68,16 @@ const WaveTrack = () => {
             }),
             wavesurfer.on('timeupdate', (currentTime) => {
                 setTime(formatTime(currentTime));
+            }),
+            wavesurfer.on('click', () => {
+                wavesurfer.play()
             })
         ]
         return () => {
             subscription.forEach((unsub) => unsub())
         }
     }, [wavesurfer])
+
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60)
@@ -85,16 +92,163 @@ const WaveTrack = () => {
         }
 
     }, [wavesurfer])
+
+    const arrComments = [
+        {
+            id: 1,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 10,
+            user: "username 1",
+            content: "just a comment1"
+        },
+        {
+            id: 2,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 30,
+            user: "username 2",
+            content: "just a comment3"
+        },
+        {
+            id: 3,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 50,
+            user: "username 3",
+            content: "just a comment3"
+        },
+    ]
+    const calLeft = (moment: number) => {
+        const hardCodeDuration = 199;
+        const percent = (moment / hardCodeDuration) * 100;
+        return `${percent}%`
+    }
+
     return (
-        <div style={{ marginTop: 100 }}>
-            <div ref={containerRef} className='wave-form-container'>
-                <div className='time' >{time}</div>
-                <div className='duration'>{duration}</div>
-                <div ref={hoverRef} className="hover-wave"></div>
+        <div style={{ marginTop: 20 }}>
+            <div style={{
+                display: "flex",
+                gap: 15,
+                padding: 20,
+                height: 400,
+                background: "linear-gradient(135deg, rgb(106, 112, 67) 0%, rgb(11, 15, 20) 100%)"
+            }}>
+                <div className='left' style={{
+                    width: "75%",
+                    display: "flex",
+                    height: "calc(100% - 10px)",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                }}>
+                    <div className="info" style={{ display: "flex" }}>
+                        <div>
+                            <div
+                                onClick={() => onPlayPause()}
+                                style={{
+                                    borderRadius: "50%",
+                                    background: "#f50",
+                                    height: "50px",
+                                    width: "50px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                {isPlaying === true ?
+                                    <PauseIcon
+                                        sx={{ fontSize: 30, color: "white" }}
+                                    />
+                                    :
+                                    <PlayArrowIcon
+                                        sx={{ fontSize: 30, color: "white" }}
+                                    />
+                                }
+                            </div>
+                        </div>
+                        <div style={{ marginLeft: 20 }}>
+                            <div style={{
+                                padding: "0 5px",
+                                background: "#333",
+                                fontSize: 30,
+                                width: "fit-content",
+                                color: "white"
+                            }}>
+                                Haha's song
+                            </div>
+                            <div style={{
+                                padding: "0 5px",
+                                marginTop: 10,
+                                background: "#333",
+                                fontSize: 20,
+                                width: "fit-content",
+                                color: "white"
+                            }}
+                            >
+                                GoDown
+                            </div>
+                        </div>
+                    </div>
+                    <div ref={containerRef} className="wave-form-container">
+                        <div className="time" >{time}</div>
+                        <div className="duration" >{duration}</div>
+                        <div ref={hoverRef} className="hover-wave"></div>
+                        <div className="overlay"
+                            style={{
+                                position: "absolute",
+                                height: "30px",
+                                width: "100%",
+                                bottom: "0",
+                                // background: "#ccc"
+                                backdropFilter: "brightness(0.5)"
+                            }}
+                        >
+                        </div>
+                        <div className='comment'
+                            style={{ position: "relative" }}>
+                            {arrComments.map((item) => {
+                                return (
+                                    <Tooltip title={item.content} arrow>
+                                        <img
+                                            onPointerMove={(e) => {
+                                                const hover = hoverRef.current!;
+                                                hover.style.width = calLeft(item.moment + 3);
+                                            }}
+                                            key={item.id}
+                                            className={"" + item.id}
+                                            style={{
+                                                height: 20,
+                                                width: 20,
+                                                position: "absolute",
+                                                top: 71,
+                                                zIndex: 20,
+                                                left: calLeft(item.moment)
+                                            }}
+                                            src={'http://localhost:8000/images/chill1.png'}
+                                        />
+                                    </Tooltip>
+
+                                )
+                            })}
+
+                        </div>
+                    </div>
+                </div>
+                <div className="right"
+                    style={{
+                        width: "25%",
+                        padding: 15,
+                        display: "flex",
+                        alignItems: "center"
+                    }}
+                >
+                    <div style={{
+                        background: "#ccc",
+                        width: 250,
+                        height: 250
+                    }}>
+                    </div>
+                </div>
             </div>
-            <button onClick={() => onPlayPause()}>
-                {isPlaying === true ? "Pause" : "Play"}
-            </button>
+
         </div>
 
 
