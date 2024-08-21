@@ -1,9 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-declare const process: {
-    env: {
-        NEXT_PUBLIC_BACKEND_URL: string;
-    };
-};
 export async function GET(request: NextRequest, response: NextResponse) {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);

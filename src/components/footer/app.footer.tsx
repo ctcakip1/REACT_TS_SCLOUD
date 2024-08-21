@@ -5,11 +5,6 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { Container } from '@mui/material';
 import { useHasMounted } from '@/utils/customHook';
-declare const process: {
-    env: {
-        NEXT_PUBLIC_BACKEND_URL: string
-    }
-}
 const AppFooter = () => {
     const hasMounted = useHasMounted();
     if (!hasMounted) return (<></>)

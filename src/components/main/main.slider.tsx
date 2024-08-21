@@ -7,11 +7,6 @@ import { Box, Button, Divider } from "@mui/material";
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import Link from "next/link";
-declare const process: {
-    env: {
-        NEXT_PUBLIC_BACKEND_URL: string
-    }
-}
 interface IProps {
     data: ITrackTop[];
     title: string;
