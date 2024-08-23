@@ -12,6 +12,19 @@ export const authOptions: AuthOptions = {
         }),
         // ...add more providers here
     ],
+    callbacks: {
+        jwt({ token, user, account, profile, trigger }) {
+            if (trigger === "signIn" && account?.provider === "github") {
+                token.user._id = "tuananh";
+            }
+            return token;
+        },
+        session({ session, token, user }) {
+            //@ts-ignore
+            session.user.address = token.address;
+            return session;
+        },
+    },
 };
 
 const handler = NextAuth(authOptions);
