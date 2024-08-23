@@ -20,6 +20,7 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession, signIn, signOut } from "next-auth/react"
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -61,6 +62,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+    const { data: session } = useSession();
+
     const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -108,7 +111,12 @@ export default function AppHeader() {
                     color: "unset", textDecoration: "unset"
                 }}>Profile</Link>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={
+                () => {
+                    handleMenuClose();
+                    signOut();
+                }
+            }>Logout</MenuItem>
         </Menu>
     );
 
@@ -205,10 +213,19 @@ export default function AppHeader() {
                                 textDecoration: "unset"
                             }
                         }}>
-                            <Link href={"/playlist"}>Playlists</Link>
-                            <Link href={"/like"}>Likes</Link>
-                            <span>Upload</span>
-                            <Avatar onClick={handleProfileMenuOpen}>TA</Avatar>
+                            {
+                                session ?
+                                    <>
+                                        <Link href={"/playlist"}>Playlists</Link>
+                                        <Link href={"/like"}>Likes</Link>
+                                        <span>Upload</span>
+                                        <Avatar onClick={handleProfileMenuOpen}>TA</Avatar>
+
+                                    </> :
+                                    <>
+                                        <Link href={"#"} onClick={() => signIn()}>Login</Link>
+                                    </>
+                            }
 
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
