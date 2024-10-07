@@ -54,7 +54,7 @@ const Step1 = (props: IProps) => {
                     headers: {
                         Authorization: `Bearer ${session?.access_token}`,
                         "target_type": "tracks",
-                        delay: 5000
+
                     },
                     onUploadProgress: progressEvent => {
                         let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total!);
@@ -65,10 +65,10 @@ const Step1 = (props: IProps) => {
                         })
                     }
                 })
-                props.setTrackUpload({
-                    ...trackUpload,
+                props.setTrackUpload((prevState: any) => ({
+                    ...prevState,
                     uploadedTrackName: res.data.data.fileName
-                })
+                }))
             } catch (error) {
                 //@ts-ignore
                 alert(error?.response?.data?.message)
