@@ -7,10 +7,20 @@ import { Container } from '@mui/material';
 import { useHasMounted } from '@/utils/customHook';
 import { TrackContext, useTrackContext } from '@/lib/track.wrapper';
 const AppFooter = () => {
+    const playerRef = React.useRef(null);
     const hasMounted = useHasMounted();
     if (!hasMounted) return (<></>)
     const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext
     console.log("check track: ", currentTrack)
+    //@ts-ignore
+    if (currentTrack.isPlaying) {
+        //@ts-ignore
+        playerRef?.current?.audio?.current?.play()
+    } else {
+        //@ts-ignore
+        playerRef?.current?.audio?.current?.pause()
+    }
+
     return (
         <div style={{ marginTop: 50 }}>
             <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: "#f2f2f2" }}>
@@ -21,12 +31,19 @@ const AppFooter = () => {
                     }
                 }}>
                     <AudioPlayer
+                        ref={playerRef}
                         layout='horizontal-reverse'
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/hoidanit.mp3`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${currentTrack.trackUrl}`}
                         volume={0.5}
                         style={{
                             boxShadow: "unset",
                             background: "#f2f2f2"
+                        }}
+                        onPlay={() => {
+                            setCurrentTrack({ ...currentTrack, isPlaying: true })
+                        }}
+                        onPause={() => {
+                            setCurrentTrack({ ...currentTrack, isPlaying: false })
                         }}
                     />
                     <div style={{
