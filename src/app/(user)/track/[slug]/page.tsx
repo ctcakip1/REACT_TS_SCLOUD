@@ -2,9 +2,8 @@ import WaveTrack from '@/components/track/wave.track'
 import { useSearchParams } from 'next/navigation'
 import { Container } from '@mui/material'
 import { sendRequest } from '@/utils/api';
-
 import type { Metadata, ResolvingMetadata } from 'next'
-
+import slugify from 'slugify';
 type Props = {
     params: { slug: string }
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -34,6 +33,7 @@ export async function generateMetadata(
 }
 
 const DetailTrackPage = async (props: any) => {
+
     const { params } = props;
     console.log("params: ", params)
     const res = await sendRequest<IBackendRes<ITrackTop>>({

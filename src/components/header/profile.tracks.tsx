@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { sendRequest } from '@/utils/api';
+import { convertSlugUrl, sendRequest } from '@/utils/api';
 import { useTrackContext } from '@/lib/track.wrapper';
 import PauseIcon from '@mui/icons-material/Pause';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ export default function ProfileTracks(props: any) {
                     <Link style={{
                         textDecoration: "none",
                         color: "unset"
-                    }} href={`/track/${data._id}?audio=${data.trackUrl}&id=${data._id}`}>
+                    }} href={`/track/${convertSlugUrl(data.title)}-${data._id}.html?audio=${data.trackUrl}`}>
                         <Typography component="div" variant="h5">
                             {data.title}
                         </Typography>
